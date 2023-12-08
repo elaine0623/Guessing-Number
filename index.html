@@ -24,12 +24,13 @@
   let targetNumber = Math.floor(Math.random() * 100) + 1;
   console.log("answer: " + targetNumber);
   let isclick = false;
-  
+
   // Get element
   const guessField = document.getElementById("guessField");
   const guessSubmit = document.getElementById("guessSubmit");
   const message = document.querySelector(".message");
   const playAgain = document.getElementById("playAgain");
+  const second = document.querySelector(".second")
   //let revealanswer = document.querySelector(".revealanswer");
   //revealanswer = targetNumber;
   //console.log(revealanswer);
@@ -70,33 +71,51 @@
       message.style.color = "red";
       guessSubmit.disabled = true;
       count = [];
-      setTimeout(() => {
-        reNew();
-      }, 5000);
+      //setTimeout(() => {
+      //reNew();
+      //}, 5000);
+      // 使用 delayedDisplay 來執行倒數計時
+      delayedDisplay("5", 0, display);
+      delayedDisplay("4", 1000, display);
+      delayedDisplay("3", 2000, display);
+      delayedDisplay("2", 3000, display);
+      delayedDisplay("1", 4000, display);
+      delayedDisplay("", 5000,reNew);
     }
-  
 
-  guessField.value = "";
-  guessField.focus();
-    }
+
+    guessField.value = "";
+    guessField.focus();
+  }
   function revealAnwser() {
     revealanswer.textContent = `本次答案：${targetNumber}`
-    isclick =true;
+    isclick = true;
   }
 
-  function reNew() {
+  function reNew(aaa) {
     message.textContent = "";
+    second.textContent ="";
     targetNumber = Math.floor(Math.random() * 100) + 1;
     console.log("answer : " + targetNumber);
     guessSubmit.disabled = false;
     let count = [];
     console.log(count);
     console.log(isclick);
-    if (isclick){
+    if (isclick) {
       revealanswer.textContent = "揭曉答案";
-      isclick =false;
+      isclick = false;
     }
   }
+  function delayedDisplay(string, ms, callback) {
+    setTimeout(() => {
+      callback(string);
+    }, ms);
+  }
+
+  function display(sec) {
+    second.textContent = sec;
+  }
+
 </script>
 
 </html>
