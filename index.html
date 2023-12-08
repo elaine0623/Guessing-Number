@@ -1,67 +1,102 @@
 <!doctype html>
 <html lang="zh-Hant-TW">
-  <head>
-    <title>猜數字遊戲</title>
-    <meta charset="utf-8" />
-  </head>
-  <body>
-    <h1>猜數字遊戲</h1>
-    <p>
-      <span class="downbounder">1</span>
-      到 <span class="upperbounder">100</span> 之間的數字，你猜是多少？
-    </p>
-    <input type="text" id="guessField" />
-    <input type="submit" value="猜!" id="guessSubmit" />
-    <p class="message"></p>
-    <button onclick="revealAnwser()" type="button" id="revealanswer">揭曉答案</button>
-  </body>
-  <script>
-    // Random number
-    const targetNumber = Math.floor(Math.random() * 100) + 1;
-    console.log("answer: " + targetNumber);
 
-    // Get element
-    const guessField = document.getElementById("guessField");
-    const guessSubmit = document.getElementById("guessSubmit");
-    const message = document.querySelector(".message");
-    //let revealanswer = document.querySelector(".revealanswer");
-    //revealanswer = targetNumber;
-    //console.log(revealanswer);
-    let upperbounder = document.querySelector(".upperbounder");
-    let downbounder = document.querySelector(".downbounder");
-    //測試是否有確實抓到html對應element downbounder.textContent = "";
-    const count = [];
-    let count1;
-    // Event listener
-    guessSubmit.addEventListener("click", checkGuess);
+<head>
+  <title>猜數字遊戲</title>
+  <meta charset="utf-8" />
+</head>
 
-    // Guess function
-    function checkGuess() {
-      const userGuess = parseInt(guessField.value);
-      console.log("userGuess: " + userGuess);
-      count.push(userGuess);
-      console.log(count);
-      count1 = count.length;
-      console.log(count1);
-      if (userGuess === targetNumber) {
-        message.textContent = `恭喜你，你猜對了！你這次猜了 ${count1} 次哦～`;//使用反引號及${}才是正確
-        message.style.color = "green";
-        guessSubmit.disabled = true;
-      } else if (userGuess < targetNumber) {
-        downbounder.textContent = userGuess;
-        message.textContent = "太小了，再試一次。";
-        message.style.color = "red";
-      } else {
-        upperbounder.textContent = userGuess;
-        message.textContent = "太大了，再試一次。";
-        message.style.color = "red";
-      }
+<body>
+  <h1>猜數字遊戲</h1>
+  <p>
+    <span class="downbounder">1</span>
+    到 <span class="upperbounder">100</span> 之間的數字，你猜是多少？
+  </p>
+  <input type="text" id="guessField" />
+  <input type="submit" value="猜!" id="guessSubmit" />
+  <p class="message"></p>
+  <p class="second"></p>
+  <button onclick="revealAnwser()" type="button" id="revealanswer">揭曉答案</button>
+  <input type="submit" value="再玩一次" id="playAgain" />
+</body>
+<script>
+  // Random number
+  let targetNumber = Math.floor(Math.random() * 100) + 1;
+  console.log("answer: " + targetNumber);
+  let isclick = false;
+  
+  // Get element
+  const guessField = document.getElementById("guessField");
+  const guessSubmit = document.getElementById("guessSubmit");
+  const message = document.querySelector(".message");
+  const playAgain = document.getElementById("playAgain");
+  //let revealanswer = document.querySelector(".revealanswer");
+  //revealanswer = targetNumber;
+  //console.log(revealanswer);
+  let upperbounder = document.querySelector(".upperbounder");
+  let downbounder = document.querySelector(".downbounder");
+  //測試是否有確實抓到html對應element downbounder.textContent = "";
+  let count = [];
+  let count1;
+  // Event listener
+  guessSubmit.addEventListener("click", checkGuess);
+  playAgain.addEventListener("click", reNew);
 
-      guessField.value = "";
-      guessField.focus();
+  // Guess function
+  function checkGuess() {
+    const userGuess = parseInt(guessField.value);
+    console.log("userGuess: " + userGuess);
+    count.push(userGuess);
+    console.log(count);
+    count1 = count.length;
+    console.log(count1);
+    if (userGuess === targetNumber) {
+      message.textContent = `恭喜你，你猜對了！你這次猜了 ${count1} 次哦～`;//使用反引號及${}才是正確
+      message.style.color = "green";
+      guessSubmit.disabled = true;
+      count = [];
+    } else if (userGuess < targetNumber) {
+      downbounder.textContent = userGuess;
+      message.textContent = "太小了，再試一次。";
+      message.style.color = "red";
+    } else {
+      upperbounder.textContent = userGuess;
+      message.textContent = "太大了，再試一次。";
+      message.style.color = "red";
     }
-    function revealAnwser(){
-      revealanswer.textContent = `本次答案：${targetNumber}`
+    //失敗顯示功能
+    if (count1 > 4) {
+      message.textContent = "You failed!";
+      message.style.color = "red";
+      guessSubmit.disabled = true;
+      count = [];
+      setTimeout(() => {
+        reNew();
+      }, 5000);
     }
-  </script>
+  
+
+  guessField.value = "";
+  guessField.focus();
+    }
+  function revealAnwser() {
+    revealanswer.textContent = `本次答案：${targetNumber}`
+    isclick =true;
+  }
+
+  function reNew() {
+    message.textContent = "";
+    targetNumber = Math.floor(Math.random() * 100) + 1;
+    console.log("answer : " + targetNumber);
+    guessSubmit.disabled = false;
+    let count = [];
+    console.log(count);
+    console.log(isclick);
+    if (isclick){
+      revealanswer.textContent = "揭曉答案";
+      isclick =false;
+    }
+  }
+</script>
+
 </html>
