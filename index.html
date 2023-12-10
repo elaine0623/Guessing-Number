@@ -45,10 +45,17 @@
 
   // Guess function
   function checkGuess() {
-    const userGuess = parseInt(guessField.value);
+    const userGuess = Number(guessField.value);//使用number而不是parseInt()因為input123aa的話123會被記錄
+    //console.log(userGuess)
+    if(isNaN(userGuess))
+    {
+      message.textContent ="請輸入有效數字"
+      message.style.color="red";
+    }else{    
+      count.push(userGuess);
+    }
     console.log("userGuess: " + userGuess);
-    count.push(userGuess);
-    console.log(count);
+    //console.log(count);
     count1 = count.length;
     console.log(count1);
     if (userGuess === targetNumber) {
@@ -60,7 +67,7 @@
       downbounder.textContent = userGuess;
       message.textContent = "太小了，再試一次。";
       message.style.color = "red";
-    } else {
+    } else if (userGuess > targetNumber){
       upperbounder.textContent = userGuess;
       message.textContent = "太大了，再試一次。";
       message.style.color = "red";
@@ -87,31 +94,36 @@
     guessField.value = "";
     guessField.focus();
   }
+  //揭曉答案
   function revealAnwser() {
     revealanswer.textContent = `本次答案：${targetNumber}`
     isclick = true;
   }
-
-  function reNew(aaa) {
+  //再玩一次
+  function reNew(string) {//對應83行第一個參數，必須要有參數
     message.textContent = "";
     second.textContent ="";
     targetNumber = Math.floor(Math.random() * 100) + 1;
     console.log("answer : " + targetNumber);
     guessSubmit.disabled = false;
+    downbounder.textContent = 1;
+    upperbounder.textContent = 100;
     let count = [];
-    console.log(count);
+    //console.log(count);
+    //判斷揭曉答案是否被執行
     console.log(isclick);
     if (isclick) {
-      revealanswer.textContent = "揭曉答案";
+      revealanswer.textContent = "揭曉答案";//本次答案：XX回復為“揭曉答案”
       isclick = false;
     }
   }
+  //延遲秒數&倒數功能
   function delayedDisplay(string, ms, callback) {
     setTimeout(() => {
-      callback(string);
+      callback(string);//keysentence
     }, ms);
   }
-
+//顯示秒數
   function display(sec) {
     second.textContent = sec;
   }
