@@ -26,9 +26,9 @@
   let isclick = false;
 
   // Get element
-  const guessField = document.getElementById("guessField");
+  const guessField = document.getElementById("guessField");//記錄玩家動作
   const guessSubmit = document.getElementById("guessSubmit");
-  const message = document.querySelector(".message");
+  const message = document.querySelector(".message");//顯示網頁上
   const playAgain = document.getElementById("playAgain");
   const second = document.querySelector(".second")
   //let revealanswer = document.querySelector(".revealanswer");
@@ -37,8 +37,7 @@
   let upperbounder = document.querySelector(".upperbounder");
   let downbounder = document.querySelector(".downbounder");
   //測試是否有確實抓到html對應element downbounder.textContent = "";
-  let count = [];
-  let count1;
+  let countGuess = [];
   // Event listener
   guessSubmit.addEventListener("click", checkGuess);
   playAgain.addEventListener("click", reNew);
@@ -52,32 +51,16 @@
       message.textContent ="請輸入有效數字"
       message.style.color="red";
     }else{    
-      count.push(userGuess);
+      countGuess.push(userGuess);
     }
     console.log("userGuess: " + userGuess);
-    //console.log(count);
-    count1 = count.length;
-    console.log(count1);
-    if (userGuess === targetNumber) {
-      message.textContent = `恭喜你，你猜對了！你這次猜了 ${count1} 次哦～`;//使用反引號及${}才是正確
-      message.style.color = "green";
-      guessSubmit.disabled = true;
-      count = [];
-    } else if (userGuess < targetNumber) {
-      downbounder.textContent = userGuess;
-      message.textContent = "太小了，再試一次。";
-      message.style.color = "red";
-    } else if (userGuess > targetNumber){
-      upperbounder.textContent = userGuess;
-      message.textContent = "太大了，再試一次。";
-      message.style.color = "red";
-    }
+    console.log(countGuess);
     //失敗顯示功能
-    if (count1 > 4) {
+    if (countGuess.length > 4) {
       message.textContent = "You failed!";
       message.style.color = "red";
       guessSubmit.disabled = true;
-      count = [];
+      countGuess = [];
       //setTimeout(() => {
       //reNew();
       //}, 5000);
@@ -91,6 +74,21 @@
     }
 
 
+    if (userGuess === targetNumber) {
+      message.textContent = `恭喜你，你猜對了！你這次猜了 ${countGuess.length} 次哦～`;//使用反引號及${}才是正確
+      message.style.color = "green";
+      guessSubmit.disabled = true;
+      countGuess = [];
+    } else if (userGuess < targetNumber) {
+      downbounder.textContent = userGuess;
+      message.textContent = "太小了，再試一次。";
+      message.style.color = "red";
+    } else if (userGuess > targetNumber){
+      upperbounder.textContent = userGuess;
+      message.textContent = "太大了，再試一次。";
+      message.style.color = "red";
+    }
+    
     guessField.value = "";
     guessField.focus();
   }
@@ -100,7 +98,7 @@
     isclick = true;
   }
   //再玩一次
-  function reNew(string) {//對應83行第一個參數，必須要有參數
+  function reNew(string) {//對應delayedDisplay()第一個參數，必須要有參數
     message.textContent = "";
     second.textContent ="";
     targetNumber = Math.floor(Math.random() * 100) + 1;
@@ -108,8 +106,8 @@
     guessSubmit.disabled = false;
     downbounder.textContent = 1;
     upperbounder.textContent = 100;
-    let count = [];
-    //console.log(count);
+    countGuess = [];
+    //console.log(countGuess);
     //判斷揭曉答案是否被執行
     console.log(isclick);
     if (isclick) {
